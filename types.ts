@@ -10,6 +10,7 @@ export interface Room {
   x: number;
   y: number;
   name: string;
+  area?: string;
 }
 
 export interface Door {
@@ -32,6 +33,15 @@ export interface Furniture {
   width: number;
   height: number;
   type: string;
+  rotation?: number;
+}
+
+export interface Fixture {
+  x: number;
+  y: number;
+  type: 'toilet' | 'sink' | 'shower' | 'range' | 'fridge' | 'stairs';
+  width: number;
+  height: number;
 }
 
 export interface FloorplanData {
@@ -40,6 +50,7 @@ export interface FloorplanData {
   doors: Door[];
   windows?: Window[];
   furniture?: Furniture[];
+  fixtures?: Fixture[];
   metadata: {
     scale: string;
     description: string;

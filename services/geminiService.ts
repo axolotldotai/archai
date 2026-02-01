@@ -12,21 +12,26 @@ export const generateFloorplan = async (base64Image: string): Promise<FloorplanD
     contents: {
       parts: [
         {
-          text: `You are a world-class architectural engineer. 
-          Transform the provided image into a highly detailed, professional technical floorplan.
+          text: `You are a world-class architectural drafter. 
+          Transform the provided image into an extremely high-detail, technical blueprint.
           
           Technical Requirements:
-          1. Analyze spatial relationships and scale deeply.
-          2. Use a coordinate system from 0 to 1000. 
-          3. IMPORTANT: Scale the drawing to occupy at least 80% of the 1000x1000 coordinate space. Do not leave large empty margins.
-          4. Include:
-             - 'walls': Primary structural boundaries (thick lines).
-             - 'doors': Entryways and internal transitions.
-             - 'windows': Glazed openings in walls.
-             - 'rooms': Clearly labeled functional zones with precise centering.
-             - 'furniture': Block out major elements like beds, sofas, tables, or counters.
-          5. Ensure the plan is "watertight" (walls connect properly).
-          6. Add architectural metadata.`
+          1. Spatial Resolution: Use a 0-1000 coordinate system.
+          2. Scale: Occupy at least 95% of the available space. Maximize the drawing size to fill the frame.
+          3. Structural Detail: 
+             - 'walls': Include all internal partitions, exterior shells, and column structures.
+             - 'doors': Show clear openings and swing directions for every portal.
+             - 'windows': Detail window placements, including double-glazing lines.
+          4. Functional Detail (MAXIMUM DENSITY):
+             - 'furniture': Add detailed block-outs for every room (beds, wardrobes, desks, dining sets, sofa arrangements).
+             - 'fixtures': Include comprehensive kitchen (counters, sink, stove, fridge), bathroom (toilet, vanity, tub/shower), and utility spaces.
+             - 'details': Show floor patterns or textures where appropriate by adding extra thin lines (e.g., stairs, tiles).
+          5. Labeling: 
+             - Provide 'rooms' with names and precise (x,y) coordinates.
+             - CRITICAL: Room labels must be placed in empty floor spaces. 
+             - STALEMATE PREVENTION: Ensure no label overlaps with any wall, furniture, window, or other label. 
+             - If a room is too small, place the label outside with a leader line (coordinate outside the wall).
+          6. Blueprint Aesthetics: The output must look like a professional CAD drawing ready for construction.`
         },
         {
           inlineData: {
@@ -61,7 +66,8 @@ export const generateFloorplan = async (base64Image: string): Promise<FloorplanD
               properties: {
                 x: { type: Type.NUMBER },
                 y: { type: Type.NUMBER },
-                name: { type: Type.STRING }
+                name: { type: Type.STRING },
+                area: { type: Type.STRING }
               },
               required: ["x", "y", "name"]
             }
@@ -93,6 +99,21 @@ export const generateFloorplan = async (base64Image: string): Promise<FloorplanD
             }
           },
           furniture: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                x: { type: Type.NUMBER },
+                y: { type: Type.NUMBER },
+                width: { type: Type.NUMBER },
+                height: { type: Type.NUMBER },
+                type: { type: Type.STRING },
+                rotation: { type: Type.NUMBER }
+              },
+              required: ["x", "y", "width", "height", "type"]
+            }
+          },
+          fixtures: {
             type: Type.ARRAY,
             items: {
               type: Type.OBJECT,
